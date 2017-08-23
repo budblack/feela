@@ -19,14 +19,14 @@
         opacity: 0
     }
 </style>
-<script>
-	const ModuleCesium = require('./cesium/index.vue')
+<script lang="js">
+	const ModuleCesium = require('./cesium/index.vue');
 
     let vm = {
       currentView: 'cesium'
     };
 
-    module.exports = {
+    module.exports            = {
       data(){
         return vm;
       },
@@ -34,13 +34,19 @@
         'cesium': ModuleCesium
       },
       mounted   : function () {
+        /**
+         * 依次初始化各个顶层模块
+         * 各个模块 require 一次
+         */
+        require('./_comm');
+        require('./_event');
 
       },
       beforeRouteEnter (to, from, next) {
         next();
       }
-    }
+    };
     module.exports.exportAPIs = {
       cesium: ModuleCesium.exportAPI
-    }
+    };
 </script>

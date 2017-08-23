@@ -23,17 +23,48 @@
 <script>
 	window.CESIUM_BASE_URL = './Cesium/';
 
-    require('Cesium/Source/Widgets/widgets.css')
-    
+    require('Cesium/Source/Widgets/widgets.css');
     const Cesium = require('Cesium/Source/Cesium'),
-        config = require('../../config')
+        comm = require('../_comm'),
+        config = require('../../config'),
+        { core, ui } = comm,
+        { eventEmitter: em } = core;
 
     export default {
       data(){
         return {}
       },
       methods  : {
-        initCesiumModule: function () {
+        /**
+         *
+         * @param {{}} viewer Cesium 视图对象
+         */
+        initHandles     : async function (viewer) {
+          /******************************************************************
+           * 屏幕区域事件 Handle
+           ******************************************************************/
+          /**
+           * @type {*} 屏幕事件句柄
+           */
+          const screenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+          /**
+           * setInputAction. Set a function to be executed on an input event.
+           * But I dont know what the 'INPUT EVENT' means to.
+           *
+           * By the way, I only going to transfer events to app inside event bus without any meaninful process.
+           */
+          screenSpaceEventHandler.setInputAction(function (movement) {
+            em.emit('cesium/screen/input', movement);
+            let windowPosition       = viewer.camera.getPickRay(movement.position),
+                cartesianCoordinates = viewer.scene.globe.pick(windowPosition, viewer.scene);
+
+            Cesium.Math.toDegrees(cartoCoordinates.longitude)
+            Cesium.Math.toDegrees(cartoCoordinates.latitude)
+            Cesium.Math.toDegrees(cartoCoordinates.height)
+
+          }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+        },
+        initCesiumModule: async function () {
           let cesium_viewer_container = 'cesiumContainer',
               cesium_viewer_option    = {
                 animation         : false, //动画控制，默认true
@@ -88,19 +119,22 @@
               }
           );
           viewer._cesiumWidget._creditContainer.style.display = 'none';
-        }
+          return viewer;
+        },
       },
-      mounted  : function () {
+      mounted  : async function () {
         try {
-          this.initCesiumModule();
+          let viewer = await this.initCesiumModule();
+          await this.initHandles(viewer)
         }
         catch (e) {}
+        finally {
+          em.emit('cesium/core/init');
+        }
       },
       beforeRouteEnter (to, from, next) {
         next();
       },
       exportAPI: require('./controller')
     }
-
-
 </script>
