@@ -72,7 +72,7 @@ module.exports = {
     new CleanPlugin('dist/*'),
     new HtmlWebpackPlugin(
         {
-          title   : 'BSDev',
+          title   : 'FEELA',
           filename: 'index.html',
           template: __dirname + '/src/_static/index.html',
           inject  : true,

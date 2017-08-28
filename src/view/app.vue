@@ -1,8 +1,5 @@
 <template>
-    <div
-            id="bscontainer"
-            class="gray-bg"
-    >
+    <div class="feela">
         <keep-alive>
             <transition name="fade" mode="out-in">
                 <component :is="currentView"></component>
@@ -11,6 +8,10 @@
     </div>
 </template>
 <style lang="less">
+    .feela {
+        height: 100%;
+    }
+
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s
     }

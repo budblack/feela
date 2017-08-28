@@ -1,14 +1,17 @@
 require('babel-core/register');
 require('babel-polyfill');
 require('normalize.css');
+// require('auto-load');
 
-import Vue from 'vue';
-const App = require('./view/app.vue');
+const App = require('./view/app.vue'),
+      Vue = require('vue');
+
+// autoload(__dirname + '/view');
 
 if (window) {
-  window.BS = {
-    Init: function (
-        container = 'bscontainer'
+  window.feela = {
+    init: function (
+        container = 'feela'
     ) {
       return new Promise(function (resolve, reject) {
         new Vue(

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "auto-load": "^3.0.0",
     "autolinker": "^1.4.3",
     "cesium": "^1.32.1",
     "csg": "^1.0.1",
@@ -35,8 +36,6 @@
     "vue-template-compiler": "^2.1.8"
   },
   "devDependencies": {
-    "@types/node": "^7.0.22",
-    "@types/three": "^0.84.8",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-polyfill": "^6.23.0",
@@ -59,13 +58,12 @@
     "mocha": "^3.4.2",
     "path": "^0.12.7",
     "style-loader": "^0.17.0",
-    "ts-loader": "^2.0.3",
-    "typescript": "^2.3.2",
     "webpack": "^1.15.0",
     "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
     "dev": "webpack-dev-server --config webpack.config.development.js",
+    "build": "webpack --config webpack.config.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit"
   },

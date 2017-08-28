@@ -30,8 +30,11 @@ module.exports = {
         eventEmitter.emit(event, data);
       },
       on  : (event, callback) => {
+        console.log({ msg: '监听事件', event: callback.toString() });
+        toastr.info(`监听事件 [${event}]`);
         eventEmitter.on(event, callback);
       }
     }
-  }
+  },
+  cesium:null
 };

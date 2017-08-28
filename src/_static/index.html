@@ -1,30 +1,34 @@
+<!DOCTYPE html>
 <html>
 <head>
     <style>
         .fram {
+            height: 512px;
+            background-color: #66ccff;
+        }
+
+        .c {
             margin: auto;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
+            left: 10px;
+            right: 10px;
+            top: 10px;
+            bottom: 10px;
             border-style: dashed;
             border-width: 2px;
-            min-width: 400px;
-            min-height: 300px;
-            width: calc(100%);
-            height: calc(100%);
+            width: calc(100% - 4px);
+            height: calc(100% - 4px);
             background: #c1c1c1;
         }
     </style>
 </head>
 <body>
 <div class="fram">
-    <div id="bscontainer"></div>
+    <div id="c"></div>
 </div>
 </body>
 
 <script>
-
-    BS.Init('bscontainer');
+  window.CESIUM_BASE_URL = './Cesium/';
+  feela.init('c');
 </script>
 </html>

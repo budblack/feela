@@ -3,25 +3,19 @@ const path              = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanPlugin       = require('clean-webpack-plugin');
 const CopyPlugin        = require('copy-webpack-plugin');
-const BabiliPlugin      = require('babili-webpack-plugin');
 
-let now        = new Date(),
-    outputname = `feela.${(
-        now.getYear() + 1900
-    )}-${now.getMonth()
-         + 1}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`;
 module.exports = {
-  node     : {
+  node   : {
     fs: 'empty'
   },
-  entry    : __dirname + '/src/index.js',
-  output   : {
-    filename     : `${outputname}.[chunkhash:6].js`,
+  entry  : __dirname + '/src/index.js',
+  output : {
+    filename     : 'feela.js',
     path         : './dist',
     publicPath   : '/',
-    chunkFilename: `${outputname}/[chunkhash:6].js`
+    chunkFilename: 'chunk/[name].[chunkhash:6].js'
   },
-  resolve  : {
+  resolve: {
     extensions: [
       '',
       '.ts',
@@ -29,7 +23,7 @@ module.exports = {
       '.vue'
     ]
   },
-  module   : {
+  module : {
     unknownContextCritical: false,
     loaders               : [
       {
@@ -38,8 +32,12 @@ module.exports = {
       },
       {
         test   : /\.js$/,
-        loader : 'babel-loader',
-        exclude: /node_modules/
+        loader : 'babel',
+        include: /src/,
+        exclude: /node_modules/,
+        query  : {
+          presets: ['es2015']
+        }
       },
       { test: /\.ts$/, loader: 'babel-loader!ts-loader' },
       {
@@ -52,18 +50,10 @@ module.exports = {
       }
     ]
   },
-  babel    : {
+  babel  : {
     presets: ['es2015', 'stage-0']
   },
-  devServer: {
-    contentBase       : './dist',
-    host              : '0.0.0.0',
-    port              : 3001,
-    colors            : true,
-    historyApiFallback: true,
-    inline            : true
-  },
-  plugins  : [
+  plugins: [
     new webpack.ProvidePlugin(
         {
           $     : 'jquery',
@@ -71,11 +61,10 @@ module.exports = {
           THREE : 'three'
         }
     ),
-    new webpack.optimize.OccurrenceOrderPlugin(),
     new CleanPlugin('dist/*'),
     new HtmlWebpackPlugin(
         {
-          title   : 'BSDev',
+          title   : 'FEELA',
           filename: 'index.html',
           template: __dirname + '/src/_static/index.html',
           inject  : true,
@@ -86,6 +75,7 @@ module.exports = {
           }
         }
     ),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new BabiliPlugin(),
     new CopyPlugin(
         [
@@ -96,10 +86,6 @@ module.exports = {
           {
             from: __dirname + '/src/_static/Cesium/',
             to  : 'Cesium'
-          },
-          {
-            from: __dirname + '/src/_static/testModels/',
-            to  : 'testModels'
           }
         ]
     )
