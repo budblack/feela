@@ -76,7 +76,6 @@ module.exports = {
         }
     ),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new BabiliPlugin(),
     new CopyPlugin(
         [
           {
@@ -86,6 +85,10 @@ module.exports = {
           {
             from: __dirname + '/src/_static/Cesium/',
             to  : 'Cesium'
+          },
+          {
+            from: __dirname + '/src/_static/assets/',
+            to  : 'assets'
           }
         ]
     )

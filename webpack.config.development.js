@@ -92,6 +92,10 @@ module.exports = {
           {
             from: __dirname + '/src/_static/Cesium/',
             to  : 'Cesium'
+          },
+          {
+            from: __dirname + '/src/_static/assets/',
+            to  : 'assets'
           }
         ]
     )

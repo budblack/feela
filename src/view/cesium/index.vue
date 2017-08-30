@@ -64,14 +64,20 @@
          * By the way, I only going to transfer events to app inside event bus without any meaninful process.
          */
         screenSpaceEventHandler.setInputAction(function (movement) {
-          em.emit('cesium/screen/input', movement);
+          let windowPosition       = viewer.camera.getPickRay(movement.position),
+              cartesianCoordinates = viewer.scene.globe.pick(windowPosition, viewer.scene),
+              cartoCoordinates     = {};
+          if (cartesianCoordinates) {
+            cartoCoordinates = Cesium.Cartographic.fromCartesian(cartesianCoordinates)
 
-          //            let windowPosition       = viewer.camera.getPickRay(movement.position),
-          //                cartesianCoordinates = viewer.scene.globe.pick(windowPosition, viewer.scene);
-          //
-          //            Cesium.Math.toDegrees(cartoCoordinates.longitude)
-          //            Cesium.Math.toDegrees(cartoCoordinates.latitude)
-          //            Cesium.Math.toDegrees(cartoCoordinates.height)
+            let lng    = Cesium.Math.toDegrees(cartoCoordinates.longitude),
+                lat    = Cesium.Math.toDegrees(cartoCoordinates.latitude),
+                height = Cesium.Math.toDegrees(cartoCoordinates.height);
+
+            movement.wgs = { lng, lat, height };
+
+            em.emit('cesium/screen/input', movement);
+          }
 
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
       },
@@ -122,16 +128,6 @@
         inst.viewer = viewer;
         comm.cesium = inst;
 
-        viewer.camera.flyTo(
-            {
-              destination: Cesium.Cartesian3.fromDegrees(105.25, 26.5, 5000.0),
-              orientation: {
-                heading: Cesium.Math.toRadians(175.0),
-                pitch  : Cesium.Math.toRadians(-35.0),
-                roll   : 0.0
-              }
-            }
-        );
         viewer._cesiumWidget._creditContainer.style.display = 'none';
         return viewer;
       },

@@ -17,16 +17,16 @@ const eventEmitter = new EventEmitter(),
 hamsters.init(startOptions);
 
 module.exports = {
-  ui  : {
+  ui    : {
     layer,
     toastr
   },
-  core: {
+  core  : {
     hamsters,
     eventEmitter: {
       emit: (event, data) => {
         console.log({ msg: '发射事件', event, data });
-        toastr.info(`发射事件 [${event}]`);
+        toastr.info(`发射事件 [${event}]:${JSON.stringify(data || {})}`);
         eventEmitter.emit(event, data);
       },
       on  : (event, callback) => {
@@ -36,5 +36,7 @@ module.exports = {
       }
     }
   },
-  cesium:null
+  cesium: {
+    viewer: null
+  }
 };

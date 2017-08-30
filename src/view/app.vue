@@ -48,6 +48,7 @@
       }
     };
     module.exports.exportAPIs = {
-      cesium: ModuleCesium.exportAPI
+      cesium: ModuleCesium.exportAPI,
+      comm  : require('./_comm')
     };
 </script>
