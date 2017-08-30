@@ -40,66 +40,66 @@
 </body>
 
 <script>
-  window.CESIUM_BASE_URL = './Cesium/';
-  feela.init('c')
-       .then(function (feela) {
-         let { viewer } = feela.cesium.inst;
-         viewer.camera.flyTo(
-             {
-               destination: { x: -1510407, y: 5510755, z: 2829460 },
-               orientation: {
-                 heading: 2.274,
-                 pitch  : -0.283,
-                 roll   : 0.0
-               }
-             }
-         );
+    window.CESIUM_BASE_URL = './Cesium/';
+    feela.init('c')
+        .then(function (feela) {
+            let {viewer} = feela.cesium.inst;
+            viewer.camera.flyTo(
+                {
+                    destination: {x: -1510407, y: 5510755, z: 2829460},
+                    orientation: {
+                        heading: 2.274,
+                        pitch: -0.283,
+                        roll: 0.0
+                    }
+                }
+            );
 
-         feela.comm.core
-              .eventEmitter.on(
-             'cesium/screen/input',
-             (data) => {
-               console.log(data);
-               let {
-                     lat, lng,
-                     height
-                   }              = data.wgs,
-                   scene          = feela.cesium.inst.viewer.scene,
-                   labels         = scene.primitives
-                                         .add(new Cesium.LabelCollection());
-               height             = height * 0.0254;
-               labels.modelMatrix = Cesium
-                   .Transforms
-                   .eastNorthUpToFixedFrame(
-                       Cesium.Cartesian3.fromDegrees(
-                           lng,
-                           lat,
-                           height
-                       )
-                   );
-               labels.add(
-                   {
-                     position: new Cesium.Cartesian3(
-                         (
-                             0, 0, 0
-                         )),
-                     text    : JSON.stringify(
-                         {
-                           lng   : lng.toFixed(2),
-                           lat   : lat.toFixed(2),
-                           height: height.toFixed(0)
-                         })
-                   });
+            feela.comm.core
+                .eventEmitter.on(
+                'cesium/screen/input',
+                (data) => {
+                    console.log(data);
+                    let {
+                            lat, lng,
+                            height
+                        } = data.wgs,
+                        scene = feela.cesium.inst.viewer.scene,
+                        labels = scene.primitives
+                            .add(new Cesium.LabelCollection());
+                    height = height * 0.0254 -200;
+                    labels.modelMatrix = Cesium
+                        .Transforms
+                        .eastNorthUpToFixedFrame(
+                            Cesium.Cartesian3.fromDegrees(
+                                lng,
+                                lat,
+                                height
+                            )
+                        );
+                    labels.add(
+                        {
+                            position: new Cesium.Cartesian3(
+                                (
+                                    0, 0, 0
+                                )),
+                            text: JSON.stringify(
+                                {
+                                    lng: lng.toFixed(2),
+                                    lat: lat.toFixed(2),
+                                    height: height.toFixed(0)
+                                })
+                        });
 
-               feela.cesium
-                    .controller
-                    .painter
-                    .drawRect(
-                        { lng, lat }
-                    );
-             }
-         );
+                    feela.cesium
+                        .controller
+                        .painter
+                        .drawCircle(
+                            {lng, lat, r: height}
+                        );
+                }
+            );
 
-       });
+        });
 </script>
 </html>

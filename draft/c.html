@@ -1,13 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <style>
+    html {
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      position: fixed;
+      height: 100%;
+      width: 100%;
+
+    }
+
+    .fram {
+      height: 100%;
+      background-color: #66ccff;
+    }
+
+    .c {
+      margin: auto;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      bottom: 10px;
+      border-style: dashed;
+      border-width: 2px;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      background: #c1c1c1;
+    }
+  </style>
 </head>
 <body>
-
-<script>
-  cricle
-</script>
+<div class="fram">
+  <div id="c"></div>
+</div>
 </body>
+
+<script src="http://127.0.0.1:3001/feela.js"></script>
+<script>
+    window.CESIUM_BASE_URL = 'http://127.0.0.1:3001/Cesium/';
+    feela.init('c')
+        .then(function (feela) {
+            let { viewer } = feela.cesium.inst;
+            viewer.camera.flyTo(
+                {
+                    destination: { x: -1510407, y: 5510755, z: 2829460 },
+                    orientation: {
+                        heading: 2.274,
+                        pitch  : -0.283,
+                        roll   : 0.0
+                    }
+                }
+            );
+
+            feela.comm.core
+                .eventEmitter.on(
+                'cesium/screen/input',
+                (data) => {
+                    console.log(data);
+                    let {
+                            lat, lng,
+                            height
+                        }              = data.wgs,
+                        scene          = feela.cesium.inst.viewer.scene,
+                        labels         = scene.primitives
+                            .add(new Cesium.LabelCollection());
+                    height             = height * 0.0254;
+                    labels.modelMatrix = Cesium
+                        .Transforms
+                        .eastNorthUpToFixedFrame(
+                            Cesium.Cartesian3.fromDegrees(
+                                lng,
+                                lat,
+                                height
+                            )
+                        );
+                    labels.add(
+                        {
+                            position: new Cesium.Cartesian3(
+                                (
+                                    0, 0, 0
+                                )),
+                            text    : JSON.stringify(
+                                {
+                                    lng   : lng.toFixed(2),
+                                    lat   : lat.toFixed(2),
+                                    height: height.toFixed(0)
+                                })
+                        });
+
+                    feela.cesium
+                        .controller
+                        .painter
+                        .drawRect(
+                            { lng, lat }
+                        );
+                }
+            );
+
+        });
+</script>
 </html>
