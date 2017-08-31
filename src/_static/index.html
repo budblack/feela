@@ -61,45 +61,80 @@
                 (data) => {
                     console.log(data);
                     let {
-                            lat, lng,
-                            height
-                        } = data.wgs,
-                        scene = feela.cesium.inst.viewer.scene,
-                        labels = scene.primitives
-                            .add(new Cesium.LabelCollection());
-                    height = height * 0.0254 -200;
-                    labels.modelMatrix = Cesium
-                        .Transforms
-                        .eastNorthUpToFixedFrame(
-                            Cesium.Cartesian3.fromDegrees(
-                                lng,
-                                lat,
-                                height
-                            )
-                        );
-                    labels.add(
-                        {
-                            position: new Cesium.Cartesian3(
-                                (
-                                    0, 0, 0
-                                )),
-                            text: JSON.stringify(
-                                {
-                                    lng: lng.toFixed(2),
-                                    lat: lat.toFixed(2),
-                                    height: height.toFixed(0)
-                                })
-                        });
+                        lat, lng,
+                        height
+                    } = data.wgs;
+                    height = height * 0.0254 - 512;
 
-                    feela.cesium
-                        .controller
-                        .painter
-                        .drawCircle(
-                            {lng, lat, r: height}
-                        );
+                    /**
+                     * 绘制圆片
+                     */
+//                    feela.cesium
+//                        .controller
+//                        .painter
+//                        .drawCircle(
+//                            {lng, lat, r: height}
+//                        );
+//                    /**
+//                     * 绘制圆台
+//                     */
+//                    feela.cesium
+//                        .controller
+//                        .painter
+//                        .drawCylinder({lng, lat, height, r: 100, z: Math.random() * 10000})
+//
+//                    /**
+//                     * 绘制标签
+//                     */
+//                    feela.cesium
+//                        .controller
+//                        .painter
+//                        .drawLabelWithDegress({lat, lng, height, text: 'xxx'});
+                    /**
+                     * 绘制立方体
+                     */
+//                    feela.cesium
+//                        .controller
+//                        .painter
+//                        .drawBox({lng, lat, height, x: 100, y: 100, z: Math.random() * 1000})
                 }
             );
 
+            for (let i = 0; i < 10; i++) {
+                let lng = 105.39107 + Math.random() / 10,
+                    lat = 26.42890 + Math.random() / 10,
+                    height = 1795, z = Math.random() * 10000;
+                /**
+                 * 绘制圆台
+                 */
+                feela.cesium
+                    .controller
+                    .painter
+                    .drawCylinder({lng, lat, height, r: 100, z})
+
+                /**
+                 * 绘制标签
+                 */
+                feela.cesium
+                    .controller
+                    .painter
+                    .drawLabelWithDegress({
+                        lat,
+                        lng,
+                        height: height + z,
+                        text: `${ (Math.random() * 100).toFixed(0) }`
+                    });
+            }
+
+            /**
+             * 绘制模型
+             */
+            feela.cesium
+                .controller
+                .painter
+                .addModel(
+                    {lng: 105.3495597365744, lat: 26.477641377325916, height: 69611.73917470277}
+                );
         });
 </script>
 </html>
