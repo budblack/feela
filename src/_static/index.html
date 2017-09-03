@@ -42,99 +42,113 @@
 <script>
     window.CESIUM_BASE_URL = './Cesium/';
     feela.init('c')
-        .then(function (feela) {
-            let {viewer} = feela.cesium.inst;
-            viewer.camera.flyTo(
-                {
-                    destination: {x: -1510407, y: 5510755, z: 2829460},
-                    orientation: {
-                        heading: 2.274,
-                        pitch: -0.283,
-                        roll: 0.0
-                    }
-                }
-            );
+         .then(function (feela) {
+           let { viewer } = feela.cesium.inst;
+           viewer.camera.flyTo(
+               {
+                 destination: { x: -1510407, y: 5510755, z: 2829460 },
+                 orientation: {
+                   heading: 2.274,
+                   pitch  : -0.283,
+                   roll   : 0.0
+                 }
+               }
+           );
 
-            feela.comm.core
+           feela.comm.core
                 .eventEmitter.on(
-                'cesium/screen/input',
-                (data) => {
-                    console.log(data);
-                    let {
-                        lat, lng,
-                        height
-                    } = data.wgs;
-                    height = height * 0.0254 - 512;
+               'cesium/screen/input',
+               (data) => {
+                 console.log(data);
+                 let {
+                       lat, lng,
+                       height
+                     }  = data.wgs;
+                 height = height * 0.0254 - 512;
 
-                    /**
-                     * 绘制圆片
-                     */
-//                    feela.cesium
-//                        .controller
-//                        .painter
-//                        .drawCircle(
-//                            {lng, lat, r: height}
-//                        );
-//                    /**
-//                     * 绘制圆台
-//                     */
-//                    feela.cesium
-//                        .controller
-//                        .painter
-//                        .drawCylinder({lng, lat, height, r: 100, z: Math.random() * 10000})
-//
-//                    /**
-//                     * 绘制标签
-//                     */
-//                    feela.cesium
-//                        .controller
-//                        .painter
-//                        .drawLabelWithDegress({lat, lng, height, text: 'xxx'});
-                    /**
-                     * 绘制立方体
-                     */
-//                    feela.cesium
-//                        .controller
-//                        .painter
-//                        .drawBox({lng, lat, height, x: 100, y: 100, z: Math.random() * 1000})
-                }
-            );
+                 /**
+                  * 绘制圆片
+                  */
+                 feela.cesium
+                      .controller
+                      .painter
+                      .drawCircle(
+                          { lng, lat, height, radius: 1000 }
+                      );
+                 //                    /**
+                 //                     * 绘制圆台
+                 //                     */
+                 //                    feela.cesium
+                 //                        .controller
+                 //                        .painter
+                 //                        .drawCylinder({lng, lat, height, r: 100, z: Math.random() * 10000})
+                 //
+                 //                    /**
+                 //                     * 绘制标签
+                 //                     */
+                 //                    feela.cesium
+                 //                        .controller
+                 //                        .painter
+                 //                        .drawLabelWithDegress({lat, lng, height, text: 'xxx'});
+                 /**
+                  * 绘制立方体
+                  */
+                 //                    feela.cesium
+                 //                        .controller
+                 //                        .painter
+                 //                        .drawBox({lng, lat, height, x: 100, y: 100, z: Math.random() * 1000})
+               }
+           );
 
-            for (let i = 0; i < 10; i++) {
-                let lng = 105.39107 + Math.random() / 10,
-                    lat = 26.42890 + Math.random() / 10,
-                    height = 1795, z = Math.random() * 10000;
-                /**
-                 * 绘制圆台
-                 */
-                feela.cesium
-                    .controller
-                    .painter
-                    .drawCylinder({lng, lat, height, r: 100, z})
+           for (let i = 0 ; i < 50 ; i++) {
+             let lng              = 105.39107 + Math.random() / 2,
+                 lat              = 26.42890 + Math.random() / 2,
+                 height = 1000, z = Math.random() * 1000;
+             /**
+              * 绘制圆台
+              */
+             feela.cesium
+                  .controller
+                  .painter
+                  .drawCylinder({ lng, lat, height, r: 400, z });
 
-                /**
-                 * 绘制标签
-                 */
-                feela.cesium
-                    .controller
-                    .painter
-                    .drawLabelWithDegress({
+             /**
+              * 绘制标签
+              */
+             let text = z.toFixed(0) + '';
+             height += z;
+             height += z;
+             feela.cesium
+                  .controller
+                  .painter
+                  .drawLabelWithDegress(
+                      {
                         lat,
                         lng,
-                        height: height + z,
-                        text: `${ (Math.random() * 100).toFixed(0) }`
-                    });
-            }
+                        height: height,
+                        text  : text
+                      }
+                  );
+           }
 
-            /**
-             * 绘制模型
-             */
-            feela.cesium
+           /**
+            * 画一个大圆盘
+            * 假装自己是水面
+            */
+           feela.cesium
+                .controller
+                .painter
+                .drawCircle({ lng: 105.354, lat: 26.4322, height: 1266., radius: 5000 });
+
+           /**
+            * 绘制模型
+            */
+           feela.cesium
                 .controller
                 .painter
                 .addModel(
-                    {lng: 105.3495597365744, lat: 26.477641377325916, height: 69611.73917470277}
+                    { lng: 105.3495597365744, lat: 26.477641377325916, height: 69611.73917470277 }
                 );
-        });
+         });
 </script>
 </html>

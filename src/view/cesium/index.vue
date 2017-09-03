@@ -125,7 +125,7 @@
                     cesium_viewer_container,
                     cesium_viewer_option
                 );
-                viewer.scene.globe.depthTestAgainstTerrain = false;
+                viewer.scene.globe.depthTestAgainstTerrain = true;
 
                 inst.viewer = viewer;
                 comm.cesium = inst;
